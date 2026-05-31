@@ -1,15 +1,14 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <fstream>
-#include <locale>
-#include <cstdlib>
-#include "bst.h"
-#include <string>
-#include <vector>
 #include <algorithm>
 #include <cctype>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <locale>
+#include <string>
+#include <vector>
 
-namespace {
+#include "bst.h"
 
 struct WordFreq {
   std::string word;
@@ -25,8 +24,6 @@ void collect(BST<std::string>::Node* node, std::vector<WordFreq>& list) {
   collect(node->right, list);
 }
 
-}
-
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file.is_open()) {
@@ -37,8 +34,10 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::string word = "";
   int ch;
   while ((ch = file.get()) != EOF) {
-    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-      word += static_cast<char>(std::tolower(ch));
+    if (ch >= 'A' && ch <= 'Z') {
+      word += static_cast<char>(ch - 'A' + 'a');
+    } else if (ch >= 'a' && ch <= 'z') {
+      word += static_cast<char>(ch);
     } else {
       if (!word.empty()) {
         tree.add(word);
